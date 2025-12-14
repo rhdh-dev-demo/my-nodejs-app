@@ -1,0 +1,94 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: my-nodejs-app
+  description: A Node.js application
+  annotations:
+    # TechDocs - Documentation as code
+    backstage.io/techdocs-ref: dir:.
+    # GitHub - PRs, Issues, Actions
+    github.com/project-slug: rhdh-dev-demo/my-nodejs-app
+    # ArgoCD - Deployment status
+    # argocd/app-name: my-nodejs-app-dev
+    argocd/app-selector: argocd.argoproj.io/instance=my-nodejs-app-bootstrap
+    # Kubernetes Topology - Pods, logs
+
+    backstage.io/kubernetes-id: my-nodejs-app
+    # backstage.io/kubernetes-namespace: my-nodejs-app-dev
+    # Tekton - Pipeline runs
+    tekton.dev/pipeline: my-nodejs-app-build
+    tekton.dev/cicd: 'true'
+    # Jira - Issues (if enabled)
+    jira/project-key: DEMO
+    # Quay - Image security (if using Quay)
+    quay.io/repository-slug: my-nodejs-app-dev/my-nodejs-app
+  labels:
+    app.kubernetes.io/name: my-nodejs-app
+    app.kubernetes.io/part-of: my-nodejs-app-system
+  tags:
+    - nodejs
+    - tekton
+    - argocd
+    - gitops
+  links:
+    - url: https://github.com/rhdh-dev-demo/my-nodejs-app
+      title: Source Code
+      icon: github
+    - url: https://github.com/rhdh-dev-demo/my-nodejs-app-gitops
+      title: GitOps Repository
+      icon: github
+    - url: https://openshift-gitops-server-openshift-gitops.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/applications/my-nodejs-app-dev
+      title: ArgoCD - DEV
+      icon: dashboard
+    - url: https://openshift-gitops-server-openshift-gitops.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/applications/my-nodejs-app-staging
+      title: ArgoCD - Staging
+      icon: dashboard
+    - url: https://openshift-gitops-server-openshift-gitops.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/applications/my-nodejs-app-prod
+      title: ArgoCD - PROD
+      icon: dashboard
+    - url: https://console-openshift-console.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/k8s/ns/my-nodejs-app-dev/deployments
+      title: OpenShift Console - DEV
+      icon: web
+    - url: https://console-openshift-console.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/k8s/ns/my-nodejs-app-prod/deployments
+      title: OpenShift Console - PROD
+      icon: web
+    - url: https://image-registry.openshift-image-registry.svc:5000/my-nodejs-app-dev/my-nodejs-app
+      title: Container Image
+      icon: docker
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/ui-team
+  system: my-nodejs-app-system
+  providesApis:
+    - my-nodejs-app-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: my-nodejs-app-system
+  description: System for my-nodejs-app application
+  tags:
+    - nodejs
+spec:
+  owner: group:default/ui-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: my-nodejs-app-api
+  description: REST API for my-nodejs-app
+  tags:
+    - rest
+    - openapi
+  links:
+    - url: https://my-nodejs-app-my-nodejs-app-dev.apps.rosa.di4us-vsdgs-jph.6ccc.p3.openshiftapps.com/health
+      title: Health Endpoint (DEV)
+      icon: web
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:default/ui-team
+  system: my-nodejs-app-system
+  definition:
+    $text: ./api/openapi.yaml
