@@ -18,6 +18,7 @@ metadata:
     # Tekton - Pipeline runs
     tekton.dev/pipeline: my-nodejs-app-build
     tekton.dev/cicd: 'true'
+    'janus-idp.io/tekton': my-nodejs-app
     # Jira - Issues (if enabled)
     jira/project-key: DEMO
     # Quay - Image security (if using Quay)
