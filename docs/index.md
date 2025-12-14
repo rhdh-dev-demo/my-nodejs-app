@@ -1,6 +1,6 @@
 # my-nodejs-app
 
-A Node.js application
+A Node.js application created using software templates
 
 ## Overview
 
